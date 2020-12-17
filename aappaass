@@ -16,7 +16,7 @@ function usage {
 
 COMMAND=""
 
-while getopts ":hp:lrs:" ARG; do
+while getopts "hp:lrs:" ARG; do
   case $ARG in
     r)
       COMMAND="remove"
