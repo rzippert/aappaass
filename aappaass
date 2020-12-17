@@ -5,12 +5,18 @@
 # outputs so that it can be heard as well as recorded.
 
 function usage {
-      echo "Usage: $0 [-h] [-r|-l] [-p APPNAME]"
+      echo "Usage: $0 [-h] [-s SINKNAME] [-r|-l|-p APPNAME]
+	-h		Print this usage text and exits.
+	-s SINKNAME	Specify a sink to be used as output excusively.
+	-r		Remove loaded modules and sinks (undo changes).
+	-l		Lists available processes and output sinks.
+	-p PROCESS	Specify the process name that should have its sound
+			monitored."
 }
 
 COMMAND=""
 
-while getopts ":hp:lr" ARG; do
+while getopts ":hp:lrs:" ARG; do
   case $ARG in
     r)
       COMMAND="remove"
@@ -18,6 +24,9 @@ while getopts ":hp:lr" ARG; do
     p)
       COMMAND="pass"
       APPNAME=$OPTARG
+      ;;
+    s)
+      OUTSINK="$OPTARG"
       ;;
     l)
       COMMAND="list"
@@ -29,10 +38,15 @@ while getopts ":hp:lr" ARG; do
   esac
 done
 
-if [[ $# -gt 2 || $# -eq 0 ]]
+if [[ $# -gt 2 || $# -eq 0 || $COMMAND == "" ]]
 then
 	usage
 	exit 1
+fi
+
+if [[ -z $OUTSINK ]]
+then
+	export OUTSINK=$(pactl list sinks | grep -A 3 "Sink #" | grep "Name: " | sed 's/.*Name: //')
 fi
 
 if [[ "$COMMAND" == "pass" ]]
@@ -62,10 +76,11 @@ then
 
 	pactl load-module module-null-sink sink_name=\"$RECSINKNAME\" sink_properties=device.description=\"rec_passthrough\" >> /tmp/addedmodules.list
 	pactl move-sink-input $SINKNUMBER $RECSINKNAME
-	USBSINK=$(pactl load-module module-loopback source=$RECSINKNAME.monitor sink=alsa_output.usb-GeneralPlus_USB_Audio_Device-00.analog-stereo rate=44100)
-	echo $USBSINK >> /tmp/addedmodules.list
-	SPKSINK=$(pactl load-module module-loopback source=$RECSINKNAME.monitor sink=alsa_output.pci-0000_00_1f.3.analog-stereo rate=44100)
-	echo $SPKSINK >> /tmp/addedmodules.list
+
+	for SINK in $OUTSINK
+	do
+		pactl load-module module-loopback source=$RECSINKNAME.monitor sink=$SINK rate=44100 >> /tmp/addedmodules.list
+	done
 elif [[ "$COMMAND" == "remove" ]]
 then
 	if [[ -f /tmp/addedmodules.list ]]
@@ -79,5 +94,8 @@ then
 		echo "Could not find added modules list."
 	fi
 else
+	echo "Possible processes:"
 	pactl list sink-inputs | grep -e "application.process.binary\|Sink Input"
+	echo "Possible outputs:"
+	pactl list sinks | grep -A 3 "Sink #" | grep -v "State:\|--"
 fi
