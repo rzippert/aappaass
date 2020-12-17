@@ -10,13 +10,15 @@ function usage {
 	-s SINKNAME	Specify a sink to be used as output excusively.
 	-r		Remove loaded modules and sinks (undo changes).
 	-l		Lists available processes and output sinks.
+	-n RECSINKNAME	Specify recording sink name.
 	-p PROCESS	Specify the process name that should have its sound
 			monitored."
 }
 
 COMMAND=""
+RECSINKNAME="recording_sink"
 
-while getopts "hp:lrs:" ARG; do
+while getopts "hp:ln:rs:" ARG; do
   case $ARG in
     r)
       COMMAND="remove"
@@ -30,6 +32,9 @@ while getopts "hp:lrs:" ARG; do
       ;;
     l)
       COMMAND="list"
+      ;;
+    n)
+      RECSINKNAME="$OPTARG"
       ;;
     h)
       usage
@@ -51,7 +56,6 @@ fi
 
 if [[ "$COMMAND" == "pass" ]]
 then
-	RECSINKNAME="recording_sink"
 	LINES=1
 	FOUND=0
 	SINKNUMBER=""
