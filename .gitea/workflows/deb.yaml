@@ -11,12 +11,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Set env
+        run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:11})
       - uses: jiro4989/build-deb-action@v3
         with:
           package: aappaass
           package_root: pkgroot
           maintainer: Renato Zippert
-          version: ${{ github.ref }} # refs/tags/v*.*.*
+          version: ${GITHUB_REF##*/} # refs/tags/v*.*.*
           arch: 'amd64'
           depends: 'pulseaudio-utils'
           desc: 'Manages "passthrough" sinks for PulseAudio.'
