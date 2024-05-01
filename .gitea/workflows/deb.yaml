@@ -20,7 +20,7 @@ jobs:
           arch: 'amd64'
           depends: 'pulseaudio-utils'
           desc: 'Manages "passthrough" sinks for PulseAudio.'
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v3
         with:
           name: deb
           path: |
