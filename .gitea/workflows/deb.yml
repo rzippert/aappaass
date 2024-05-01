@@ -1,0 +1,22 @@
+name: Build Debian Package
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: jiro4989/build-deb-action@v3
+        with:
+          package: aappaass
+          package_root: pkgroot
+          maintainer: Renato Zippert
+          version: ${{ github.ref }} # refs/tags/v*.*.*
+          arch: 'amd64'
+          depends: 'pulseaudio-utils'
+          desc: 'Manages "passthrough" sinks for PulseAudio.'
