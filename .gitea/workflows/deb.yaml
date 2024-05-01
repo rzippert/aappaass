@@ -22,5 +22,6 @@ jobs:
           desc: 'Manages "passthrough" sinks for PulseAudio.'
       - uses: actions/upload-artifact@v4
         with:
-          name: aappaass_${{ github.ref }}_amd64.deb
-          path: ./aappaass_${{ github.ref }}_amd64.deb
+          name: deb
+          path: |
+            ./*.deb
