@@ -43,8 +43,9 @@ while getopts "hp:ln:rs:" ARG; do
   esac
 done
 
-if [[ $# -gt 2 || $# -eq 0 || $COMMAND == "" ]]
+if [[ $# -eq 0 || $COMMAND == "" ]]
 then
+	echo "Unrecognized action. Check usage:"
 	usage
 	exit 1
 fi
