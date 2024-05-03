@@ -14,11 +14,12 @@ jobs:
         run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:11})
         run: echo ::set-env name=FEEDBACKMAIL::aappaass@hash.fyi
       - name: Compile script
-        run: add-apt-repository ppa:neurobin/ppa
-        run: apt update
-        run: apt install shc
-        run: shc -f aappaass.sh -r -m ${{ env.FEDDBACKMAIL }}
-        run: cp aappaass.sh.x pkgroot/usr/bin/aappaass
+        run: |
+          add-apt-repository ppa:neurobin/ppa
+          apt update
+          apt install shc
+          shc -f aappaass.sh -r -m ${{ env.FEDDBACKMAIL }}
+          cp aappaass.sh.x pkgroot/usr/bin/aappaass
       - uses: jiro4989/build-deb-action@v3
         name: Build deb package
         with:
