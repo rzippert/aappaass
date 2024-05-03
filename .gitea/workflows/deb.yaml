@@ -18,7 +18,7 @@ jobs:
         run: |
           wget 'https://pub.zippert.me/apps/shc' -O /usr/local/bin/shc
           chmod +x /usr/local/bin/shc 
-          shc -f aappaass.sh -r -m ${{ env.FEDDBACKMAIL }}
+          shc -f aappaass.sh -r -m ${{ env.FEEDBACKMAIL }}
           cp aappaass.sh.x pkgroot/usr/bin/aappaass
       - uses: jiro4989/build-deb-action@v3
         name: Build deb package
