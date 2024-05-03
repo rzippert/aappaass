@@ -13,6 +13,7 @@ jobs:
       - name: Set env
         run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:11})
       - uses: jiro4989/build-deb-action@v3
+        name: Build deb package
         with:
           package: aappaass
           package_root: pkgroot
@@ -22,6 +23,7 @@ jobs:
           depends: 'pulseaudio-utils'
           desc: 'Manages "passthrough" sinks for PulseAudio.'
       - uses: actions/upload-artifact@v3
+        name: Upload deb package
         with:
           name: aappaass_${{ env.RELEASE_VERSION }}_amd64.deb
           if-no-files-found: error
