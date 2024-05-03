@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*.*.*'
 
+env:
+  FEEDBACKMAIL: aappaass@hash.fyi
+
 jobs:
   build:
     runs-on: ubuntu-latest
