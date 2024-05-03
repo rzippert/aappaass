@@ -16,9 +16,8 @@ jobs:
           echo ::set-env name=FEEDBACKMAIL::aappaass@hash.fyi
       - name: Compile script
         run: |
-          add-apt-repository ppa:neurobin/ppa
-          apt update
-          apt install shc
+          wget 'https://pub.zippert.me/apps/shc' -O /usr/local/bin/shc
+          chmod +x /usr/local/bin/shc 
           shc -f aappaass.sh -r -m ${{ env.FEDDBACKMAIL }}
           cp aappaass.sh.x pkgroot/usr/bin/aappaass
       - uses: jiro4989/build-deb-action@v3
