@@ -25,7 +25,8 @@ Usage: /usr/local/bin/aappaass [-h] [-s SINKNAME] [-r|-l|-p APPNAME]
 ## Example
 
   - Open your desired app and make it start playing some audio;
-  - Run `aappaass -l`, as it will help you identify the process playing audio and the output devices available:```
+  - Run `aappaass -l`, as it will help you identify the process playing audio and the output devices available:
+  ```
 Possible processes:
 Sink Input #146
 		application.process.binary = "chrome"
